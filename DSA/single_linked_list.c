@@ -8,7 +8,7 @@ struct node
     int data;
     struct node *link;
 };
-
+ 
 // creation of linked list
 struct node *create_linked_list(struct node *start)
 {
@@ -207,57 +207,44 @@ int main()
     int choice;
     while(1)
     {
-        printf("1. Create linked list");
+        printf("1. Create linked list\n");
         printf("2. Display linked list\n");
-        printf("3. Count nodes\n");
-        printf("4. Insert at beginning\n");
-        printf("5. Insert at end\n");
-        printf("6. Insert at position\n");
-        printf("7. Delete from beginning\n");
-        printf("8. Delete from end\n");
-        printf("9. Delete from position\n");
-        printf("10. Reverse linked list\n");
+        printf("3. Count the number of nodes\n");
+        printf("4. Insert a node at the beginning\n");
+        printf("5. Insert a node at the end\n");
+        printf("6. Insert a node at a given position\n");
+        printf("7. Delete a node from the beginning\n");
+        printf("8. Delete a node from the end\n");
+        printf("9. Delete a node from a given position\n");
+        printf("10. Reverse the linked list\n");
         printf("11. Exit\n");
         printf("Enter your choice: ");
-        scanf("%d\n",&choice);
+        scanf("%d",&choice);
         switch(choice)
         {
-            case 1:
-                start = create_linked_list(start);
-                break;
-            case 2:
-                display_linked_list(start);
-                break;
-            case 3:
-                printf("Number of nodes: %d\n",count_nodes(start));
-                break;
-            case 4:
-                start = insert_at_beginning(start);
-                break;
-            case 5:
-                start = insert_at_end(start);
-                break;
-            case 6:
-                start = insert_at_position(start);
-                break;
-            case 7:
-                start = delete_from_beginning(start);
-                break;
-            case 8:
-                start = delete_from_end(start);
-                break;
-            case 9:
-                start = delete_from_position(start);
-                break;
-            case 10:
-                start = reverse_linked_list(start);
-                break;
-            case 11:
-                exit(0);
-            default:
-                printf("Invalid choice\n\n");
+            case 1: start = create_linked_list(start);
+                    break;
+            case 2: display_linked_list(start);
+                    break;
+            case 3: printf("Number of nodes in the linked list is: %d\n",count_nodes(start));
+                    break;
+            case 4: start = insert_at_beginning(start);
+                    break;
+            case 5: start = insert_at_end(start);
+                    break;
+            case 6: start = insert_at_position(start);
+                    break;
+            case 7: start = delete_from_beginning(start);
+                    break;
+            case 8: start = delete_from_end(start);
+                    break;
+            case 9: start = delete_from_position(start);
+                    break;
+            case 10: start = reverse_linked_list(start);
+                    break;
+            case 11: exit(0);
+            default: printf("Invalid choice\n");
         }
     }
     return 0;
-};
-
+}

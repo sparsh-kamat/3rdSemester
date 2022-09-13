@@ -85,7 +85,6 @@ void issuebook(struct library *book, int count)
             {
                 printf("%s has now been issued\n", book[i].title);
                 book[i].issued = 1;
-                sametitle++;
                 temp = i;
             }
             flag = 1;

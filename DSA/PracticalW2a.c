@@ -217,6 +217,9 @@ struct node *deleteatpos(struct node *start, int pos)
 
 struct node *modify(struct node *start)
 {
+    //display the polynomial first
+    printf("\nThe polynomial is: ");
+    display(start);
     printf("\nDo You want to insert or delete a term? (1/2): \n");
     int ch;
     scanf("%d", &ch);

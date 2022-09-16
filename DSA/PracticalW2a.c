@@ -21,13 +21,13 @@ struct node
     struct node *next;
 };
 
-struct node *create(struct node *start,int z)
+struct node *create(struct node *start, int z)
 {
     struct node *temp, *p;
     printf("\nPlease Enter terms in descending order of exponent\n");
-    printf("Enter the number of terms in polynomial %d: ",z);
+    printf("Enter the number of terms in polynomial %d: ", z);
     int n;
-    scanf("%d\n", &n);
+    scanf("%d", &n);
     for (int i = 0; i < n; i++)
     {
         temp = (struct node *)malloc(sizeof(struct node));
@@ -46,10 +46,10 @@ struct node *create(struct node *start,int z)
             p->next = temp;
         }
     }
-}
+    return start;
+};
 
-
-void display(struct node* start)
+void display(struct node *start)
 {
     struct node *p;
     p = start;
@@ -61,6 +61,19 @@ void display(struct node* start)
             printf(" + ");
     }
     printf("\n");
+}
+
+//count number of terms
+int count(struct node *start)
+{
+    struct node *p = start;
+    int c = 0;
+    while (p != NULL)
+    {
+        c++;
+        p = p->next;
+    }
+    return c;
 }
 
 struct node *add(struct node *start1, struct node *start2)
@@ -169,7 +182,37 @@ struct node *multiply(struct node *start1, struct node *start2)
     return start3;
 }
 
-//insert at position 
+struct node *insertatbeg(struct node *start, int coeff, int power)
+{
+    struct node *temp;
+    temp = (struct node *)malloc(sizeof(struct node));
+    temp->coeff = coeff;
+    temp->power = power;
+    temp->next = start;
+    start = temp;
+    return start;
+}
+
+struct node *insertatend(struct node *start, int coeff, int power)
+{
+    struct node *temp, *p;
+    temp = (struct node *)malloc(sizeof(struct node));
+    temp->coeff = coeff;
+    temp->power = power;
+    temp->next = NULL;
+    if (start == NULL)
+        start = temp;
+    else
+    {
+        p = start;
+        while (p->next != NULL)
+            p = p->next;
+        p->next = temp;
+    }
+    return start;
+}
+
+// insert at position
 struct node *insertatpos(struct node *start, int pos, int coeff, int power)
 {
     struct node *temp, *p;
@@ -177,6 +220,7 @@ struct node *insertatpos(struct node *start, int pos, int coeff, int power)
     temp->coeff = coeff;
     temp->power = power;
     temp->next = NULL;
+    //if beginning, middle or end
     if (pos == 1)
     {
         temp->next = start;
@@ -193,7 +237,7 @@ struct node *insertatpos(struct node *start, int pos, int coeff, int power)
     return start;
 }
 
-//delete at position
+// delete at position
 struct node *deleteatpos(struct node *start, int pos)
 {
     struct node *p, *q;
@@ -217,13 +261,58 @@ struct node *deleteatpos(struct node *start, int pos)
 
 struct node *modify(struct node *start)
 {
-    //display the polynomial first
+    // display the polynomial first
     printf("\nThe polynomial is: ");
     display(start);
-    printf("\nDo You want to insert or delete a term? (1/2): \n");
+    printf("\nDo You want to \n1.insert \n2.delete a term \n3.Modify a term? \n");
     int ch;
     scanf("%d", &ch);
     if (ch == 1)
+    {
+        //menu insert at beginning or end or at position
+        printf("\nEnter in descending order of power ONLY");
+        printf("\nDo You want to \n1.insert at beginning \n2.insert at end \n3.insert at position? \n");
+        int ch1;
+        scanf("%d", &ch1);
+        if (ch1 == 1)
+        {
+            int coeff, power;
+            printf("Enter the coefficient: ");
+            scanf("%d", &coeff);
+            printf("Enter the power: ");
+            scanf("%d", &power);
+            start = insertatbeg(start, coeff, power);
+        }
+        else if (ch1 == 2)
+        {
+            int coeff, power;
+            printf("Enter the coefficient: ");
+            scanf("%d", &coeff);
+            printf("Enter the power: ");
+            scanf("%d", &power);
+            start = insertatend(start, coeff, power);
+        }
+        else if (ch1 == 3)
+        {
+            int coeff, power, pos;
+            printf("Enter the coefficient: ");
+            scanf("%d", &coeff);
+            printf("Enter the power: ");
+            scanf("%d", &power);
+            printf("Enter the position: ");
+            scanf("%d", &pos);
+            start = insertatpos(start, pos, coeff, power);
+        }
+
+    }
+    else if (ch == 2)
+    {
+        printf("Enter the position: ");
+        int pos;
+        scanf("%d", &pos);
+        start = deleteatpos(start, pos);
+    }
+    else if (ch == 3)
     {
         printf("Enter the position: ");
         int pos;
@@ -234,21 +323,22 @@ struct node *modify(struct node *start)
         printf("Enter the power: ");
         int power;
         scanf("%d", &power);
+        start = deleteatpos(start, pos);
         start = insertatpos(start, pos, coeff, power);
     }
-    else if (ch == 2)
-    {
-        printf("Enter the position: ");
-        int pos;
-        scanf("%d", &pos);
-        start = deleteatpos(start, pos);
-    }
+    else
+        printf("Invalid Choice!");
+    return start;
 }
 
 
-int main(){
+
+
+int main()
+{
     struct node *start1 = NULL, *start2 = NULL;
-    while(1){
+    while (1)
+    {
         printf("\nEnter your choice\n");
         printf("1. Enter Polynomials\n");
         printf("2. Display Polynomials\n");
@@ -258,36 +348,43 @@ int main(){
         printf("6. Exit\n");
         int choice;
         scanf("%d", &choice);
-        switch(choice){
-            case 1:
-                start1 = create(start1,1);
-                start2 = create(start2,2);
-                break;
-            case 2:
-                display(start1);
-                display(start2);
-                break;
-            case 3:
-                display(add(start1, start2));
-                break;
-            case 4:
-                display(multiply(start1, start2));
-                break;
-            case 5:
-                printf("Enter the polynomial to modify 1 or 2\n");
-                int poly;
-                scanf("%d", &poly);
-                if(1)
-                    modify(start1);
-                else
-                    modify(start2);
-                break;
+        switch (choice)
+        {
+        case 1:
+            start1 = create(start1, 1);
+            start2 = create(start2, 2);
+            break;
+        case 2:
+            printf("\nPolynomial 1: ");
+            display(start1);
+            printf("\nPolynomial 2: ");
+            display(start2);
+            break;
+        case 3:
+            printf("\nAddition Result is: ");
+            display(add(start1, start2));
+            break;
+        case 4:
+            printf("\nMultiplication Result is: ");
+            display(multiply(start1, start2));
+            break;
+        case 5:
+            printf("Enter the polynomial to modify 1 or 2\n");
+            int poly;
+            scanf("%d", &poly);
+            if (poly == 1)
+                modify(start1);
+            else
+                modify(start2);
+            break;
 
-            case 6:
-                exit(0);
-                break;
-            default:
-                printf("Invalid choice\n");
-                break;
+        case 6:
+            exit(0);
+            break;
+        default:
+            printf("Invalid choice\n");
+            break;
         }
+    }
+    return 0;
 }

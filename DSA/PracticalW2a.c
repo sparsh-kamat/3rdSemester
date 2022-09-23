@@ -13,6 +13,7 @@ Using linked list
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 struct node
 {
@@ -63,7 +64,7 @@ void display(struct node *start)
     printf("\n");
 }
 
-//count number of terms
+// count number of terms
 int count(struct node *start)
 {
     struct node *p = start;
@@ -220,7 +221,7 @@ struct node *insertatpos(struct node *start, int pos, int coeff, int power)
     temp->coeff = coeff;
     temp->power = power;
     temp->next = NULL;
-    //if beginning, middle or end
+    // if beginning, middle or end
     if (pos == 1)
     {
         temp->next = start;
@@ -269,7 +270,7 @@ struct node *modify(struct node *start)
     scanf("%d", &ch);
     if (ch == 1)
     {
-        //menu insert at beginning or end or at position
+        // menu insert at beginning or end or at position
         printf("\nEnter in descending order of power ONLY");
         printf("\nDo You want to \n1.insert at beginning \n2.insert at end \n3.insert at position? \n");
         int ch1;
@@ -303,7 +304,6 @@ struct node *modify(struct node *start)
             scanf("%d", &pos);
             start = insertatpos(start, pos, coeff, power);
         }
-
     }
     else if (ch == 2)
     {
@@ -331,8 +331,80 @@ struct node *modify(struct node *start)
     return start;
 }
 
+struct node *inputfromfile(struct node *start,int n)
+{
+    FILE *fp;
+    if(n==1){
+        //create file polynomial1.txt
+        fp = fopen("polynomial1.txt", "w");
+        printf("Enter the polynomial in the format 4x^3+2x^2+3x^1+5x^0 in file polynomial1.txt\n");
+        fclose(fp);        
+        //press "k" to continue after adding the polynomial
+        printf("Press k to continue\n");
+        char ch;
+        scanf("%c",&ch);
+        scanf("%c",&ch);
+        if(ch=='k'){
+            //read from file polynomial1.txt
+            fp = fopen("polynomial1.txt", "r");
+            char ch;
+            int coeff, power;
+            while (fscanf(fp, "%dx^%d", &coeff, &power) != EOF)
+            {
+                start = insertatend(start, coeff, power);
+                fscanf(fp, "%c", &ch);
+            }
+            fclose(fp);
+        }
 
+    }
+    
+    else if(n==2){
+        fp = fopen("polynomial2.txt", "w");
+        printf("Enter the polynomial in the format 4x^3+2x^2+3x^1+5x^0 in file polynomial2.txt\n");
+        fclose(fp);       
+        printf("Press k to continue\n");
+        char ch;
+        scanf("%c",&ch);
+        scanf("%c",&ch);
+        if(ch=='k'){
+            fp = fopen("polynomial2.txt", "r");
+            char ch;
+            int coeff, power;
+            while (fscanf(fp, "%dx^%d", &coeff, &power) != EOF)
+            {
+                start = insertatend(start, coeff, power);
+                fscanf(fp, "%c", &ch);
+            }
+            fclose(fp);
+        }
+    }
+    return start;
+}
 
+//add like terms of the polynomial
+struct node *addliketerms(struct node *start)
+{
+    struct node *p, *q;
+    p = start;
+    while (p->next != NULL)
+    {
+        q = p->next;
+        while (q != NULL)
+        {
+            if (p->power == q->power)
+            {
+                p->coeff = p->coeff + q->coeff;
+                q = q->next;
+                start = deleteatpos(start, p->power);
+            }
+            else
+                q = q->next;
+        }
+        p = p->next;
+    }
+    return start;
+}
 
 int main()
 {
@@ -345,7 +417,8 @@ int main()
         printf("3. Add Polynomials\n");
         printf("4. Multiply Polynomials\n");
         printf("5. Modify Polynomials\n");
-        printf("6. Exit\n");
+        printf("6. Take polynomials from file\n");
+        printf("7. Exit\n");
         int choice;
         scanf("%d", &choice);
         switch (choice)
@@ -366,7 +439,8 @@ int main()
             break;
         case 4:
             printf("\nMultiplication Result is: ");
-            display(multiply(start1, start2));
+            //add like terms of the polynomial after multiplication
+            display(addliketerms(multiply(start1, start2)));            
             break;
         case 5:
             printf("Enter the polynomial to modify 1 or 2\n");
@@ -377,14 +451,16 @@ int main()
             else
                 modify(start2);
             break;
-
         case 6:
+            start1 = inputfromfile(start1,1);
+            start2 = inputfromfile(start2,2);
+            break;
+        case 7:
             exit(0);
-            break;
         default:
-            printf("Invalid choice\n");
-            break;
+            printf("Invalid Choice!");
         }
     }
     return 0;
 }
+

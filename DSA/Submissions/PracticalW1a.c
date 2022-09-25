@@ -1,15 +1,3 @@
-/*
-Develop a c program to perform the following tasks
-1.accept two polynomials from user
-2.add the two polynomials
-3.multiply the two polynomials
-4.modify any of the polynomials
-  a.insert
-  b.delete
-5.Accept polynomials from a file
-Using linked list
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

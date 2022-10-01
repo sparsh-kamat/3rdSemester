@@ -1,7 +1,5 @@
-//implement doubly linked list in C. Do not declare any global variables.
-//have functions to insert, delete, display, count nodes, search, reverse the list.
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 struct node
 {
@@ -10,7 +8,7 @@ struct node
     struct node *next;
 };
 
-struct node *create_linked_list(struct node *start)
+struct node *create_list(struct node *start)
 {
     struct node *temp, *p;
     int n;
@@ -40,7 +38,7 @@ struct node *create_linked_list(struct node *start)
     return start;
 };
 
-void display_linked_list(struct node *start)
+void display(struct node *start)
 {
     struct node *p;
     if (start == NULL)
@@ -112,41 +110,13 @@ struct node *insert_at_end(struct node *start, int item)
     return start;
 };
 
-struct node *insert_after(struct node *start, int item, int x)
+struct node *insert_at_pos(struct node *start, int item, int pos)
 {
     struct node *temp, *p;
     temp = (struct node *)malloc(sizeof(struct node));
     temp->data = item;
-    p = start;
-    while (p != NULL)
+    if (pos == 1)
     {
-        if (p->data == x)
-        {
-            temp->prev = p;
-            temp->next = p->next;
-            if (p->next != NULL)
-                p->next->prev = temp;
-            p->next = temp;
-            return start;
-        }
-        p = p->next;
-    }
-    printf("%d not present in the list\n", x);
-    return start;
-};
-
-struct node *insert_before(struct node *start, int item, int x)
-{
-    struct node *temp, *p;
-    if (start == NULL)
-    {
-        printf("List is empty\n");
-        return start;
-    }
-    if (x == start->data)
-    {
-        temp = (struct node *)malloc(sizeof(struct node));
-        temp->data = item;
         temp->prev = NULL;
         temp->next = start;
         start->prev = temp;
@@ -154,150 +124,51 @@ struct node *insert_before(struct node *start, int item, int x)
         return start;
     }
     p = start;
-    while (p != NULL)
-    {
-        if (p->data == x)
-        {
-            temp = (struct node *)malloc(sizeof(struct node));
-            temp->data = item;
-            temp->prev = p->prev;
-            temp->next = p;
-            p->prev->next = temp;
-            p->prev = temp;
-            return start;
-        }
-        p = p->next;
-    }
-    printf("%d not present in the list\n", x);
-    return start;
-};
-
-struct node *insert_at_pos(struct node *start, int item, int pos)
-{
-    struct node *temp, *p;
-    int i;
-    if (pos == 1)
-        return insert_at_beg(start, item);
-    p = start;
-    for (i = 1; i < pos - 1 && p != NULL; i++)
+    for (int i = 1; i < pos - 1 && p != NULL; i++)
         p = p->next;
     if (p == NULL)
         printf("There are less than %d elements\n", pos);
     else
-        return insert_after(start, item, p->data);
+    {
+        temp->prev = p;
+        temp->next = p->next;
+        if (p->next != NULL)
+            p->next->prev = temp;
+        p->next = temp;
+    }
     return start;
 };
 
-struct node *delete_at_beg(struct node *start)
+struct node *delete_at_position(struct node *start, int pos)
+
 {
-    struct node *temp;
+    struct node *p;
+    int i;
     if (start == NULL)
     {
         printf("List is empty\n");
         return start;
     }
-    temp = start;
-    start = start->next;
-    start->prev = NULL;
-    free(temp);
-    return start;
-};
-
-struct node *delete_at_end(struct node *start)
-{
-    struct node *temp;
-    if (start == NULL)
+    if (pos == 1)
     {
-        printf("List is empty\n");
-        return start;
-    }
-    temp = start;
-    while (temp->next != NULL)
-        temp = temp->next;
-    temp->prev->next = NULL;
-    free(temp);
-    return start;
-};
-
-struct node *delete_after(struct node *start, int x)
-{
-    struct node *temp, *p;
-    if (start == NULL)
-    {
-        printf("List is empty\n");
+        p = start;
+        start = start->next;
+        if (start != NULL)
+            start->prev = NULL;
+        free(p);
         return start;
     }
     p = start;
-    while (p != NULL)
-    {
-        if (p->data == x)
-        {
-            temp = p->next;
-            if (temp == NULL)
-            {
-                printf("Element %d is the last element\n", x);
-                return start;
-            }
-            p->next = temp->next;
-            if (temp->next != NULL)
-                temp->next->prev = p;
-            free(temp);
-            return start;
-        }
+    for (i = 1; i < pos && p != NULL; i++)
         p = p->next;
-    }
-    printf("Element %d not present in the list\n", x);
-    return start;
-};
-
-struct node *delete_before(struct node *start, int x)
-{
-    struct node *temp, *p;
-    if (start == NULL)
+    if (p == NULL)
+        printf("There are less than %d elements\n", pos);
+    else
     {
-        printf("List is empty\n");
-        return start;
-    }
-    if (start->data == x)
-    {
-        printf("Element %d has no element before it\n", x);
-        return start;
-    }
-    if (start->next->data == x)
-    {
-        temp = start;
-        start = start->next;
-        start->prev = NULL;
-        free(temp);
-        return start;
-    }
-    p = start;
-    while (p != NULL)
-    {
-        if (p->data == x)
-        {
-            temp = p->prev;
-            temp->prev->next = p;
-            p->prev = temp->prev;
-            free(temp);
-            return start;
-        }
-        p = p->next;
-    }
-    printf("Element %d not present in the list\n", x);
-    return start;
-};
-
-struct node *delete_list(struct node *start)
-{
-    struct node *temp;
-    if (start == NULL)
-        return start;
-    while (start != NULL)
-    {
-        temp = start;
-        start = start->next;
-        free(temp);
+        p->prev->next = p->next;
+        if (p->next != NULL)
+            p->next->prev = p->prev;
+        free(p);
     }
     return start;
 };
@@ -327,32 +198,26 @@ int main()
     int choice, item, pos, x;
     while (1)
     {
-        printf("1. Create List\n");
+        printf("\n1. Create List\n");
         printf("2. Display\n");
         printf("3. Count\n");
         printf("4. Search\n");
         printf("5. Insert at beginning\n");
         printf("6. Insert at end\n");
-        printf("7. Insert after node\n");
-        printf("8. Insert before node\n");
-        printf("9. Insert at position\n");
-        printf("10. Delete at beginning\n");
-        printf("11. Delete at end\n");
-        printf("12. Delete node after\n");
-        printf("13. Delete node before\n");
-        printf("15. Reverse\n");
-        printf("16. Quit\n");
+        printf("7. Insert at position\n");
+        printf("8. Delete at position\n");
+        printf("9. Reverse\n");
+        printf("10. Quit\n");
         printf("Enter your choice : ");
         scanf("%d", &choice);
-        if (choice == 16)
-            break;
+        printf("\n");
         switch (choice)
         {
         case 1:
-            start = create_linked_list(start);
+            start = create_list(start);
             break;
         case 2:
-            display_linked_list(start);
+            display(start);
             break;
         case 3:
             printf("Number of elements are %d\n", count_nodes(start));
@@ -379,50 +244,23 @@ int main()
         case 7:
             printf("Enter the element to be inserted : ");
             scanf("%d", &item);
-            printf("Enter the element after which to insert : ");
-            scanf("%d", &x);
-            start = insert_after(start, item, x);
-            break;
-        case 8:
-            printf("Enter the element to be inserted : ");
-            scanf("%d", &item);
-            printf("\nEnter the element before which to insert : ");
-            scanf("%d", &x);
-            start = insert_before(start, item, x);
-            break;
-        case 9:
-            printf("Enter the element to be inserted : ");
-            scanf("%d", &item);
             printf("Enter the position at which to insert : ");
             scanf("%d", &pos);
             start = insert_at_pos(start, item, pos);
             break;
-        case 10:
-            start = delete_at_beg(start);
+        case 8:
+            printf("Enter the position at which to delete : ");
+            scanf("%d", &pos);
+            start = delete_at_position(start, pos);
             break;
-        case 11:
-            start = delete_at_end(start);
-            break;
-        case 12:
-            printf("Enter the element after which to delete : ");
-            scanf("%d", &x);
-            start = delete_after(start, x);
-            break;
-
-        case 13:
-            printf("Enter the element before which to delete : ");
-            scanf("%d", &x);
-            start = delete_before(start, x);
-            break;
-        case 15:
+        case 9:
             start = reverse(start);
             break;
+        case 10:
+            exit(1);
         default:
             printf("Wrong choice\n");
         }
     }
-    start = delete_list(start);
     return 0;
 }
-
-

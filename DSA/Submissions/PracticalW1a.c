@@ -13,7 +13,6 @@ struct node
 struct node *create(struct node *start, int z)
 {
     struct node *temp, *p;
-    printf("\nPlease Enter terms in descending order of exponent\n");
     printf("Enter the number of terms in polynomial %d: ", z);
     int n;
     scanf("%d", &n);
@@ -230,6 +229,13 @@ struct node *insertatpos(struct node *start, int pos, int coeff, int power)
 struct node *deleteatpos(struct node *start, int pos)
 {
     struct node *p, *q;
+    // cheeck if list is empty
+    if (start == NULL)
+    {
+        printf("List is empty");
+        return start;
+    }
+    // if only node
     if (pos == 1)
     {
         p = start;
@@ -258,40 +264,12 @@ struct node *modify(struct node *start)
     scanf("%d", &ch);
     if (ch == 1)
     {
-        // menu insert at beginning or end or at position
-        printf("\nEnter in descending order of power ONLY");
-        printf("\nDo You want to \n1.insert at beginning \n2.insert at end \n3.insert at position? \n");
-        int ch1;
-        scanf("%d", &ch1);
-        if (ch1 == 1)
-        {
-            int coeff, power;
-            printf("Enter the coefficient: ");
-            scanf("%d", &coeff);
-            printf("Enter the power: ");
-            scanf("%d", &power);
-            start = insertatbeg(start, coeff, power);
-        }
-        else if (ch1 == 2)
-        {
-            int coeff, power;
-            printf("Enter the coefficient: ");
-            scanf("%d", &coeff);
-            printf("Enter the power: ");
-            scanf("%d", &power);
-            start = insertatend(start, coeff, power);
-        }
-        else if (ch1 == 3)
-        {
-            int coeff, power, pos;
-            printf("Enter the coefficient: ");
-            scanf("%d", &coeff);
-            printf("Enter the power: ");
-            scanf("%d", &power);
-            printf("Enter the position: ");
-            scanf("%d", &pos);
-            start = insertatpos(start, pos, coeff, power);
-        }
+        int coeff, power;
+        printf("Enter the coefficient: ");
+        scanf("%d", &coeff);
+        printf("Enter the power: ");
+        scanf("%d", &power);
+        start = insertatend(start, coeff, power);
     }
     else if (ch == 2)
     {
@@ -319,21 +297,23 @@ struct node *modify(struct node *start)
     return start;
 }
 
-struct node *inputfromfile(struct node *start,int n)
+struct node *inputfromfile(struct node *start, int n)
 {
     FILE *fp;
-    if(n==1){
-        //create file polynomial1.txt
+    if (n == 1)
+    {
+        // create file polynomial1.txt
         fp = fopen("polynomial1.txt", "w");
         printf("Enter the polynomial in the format 4x^3+2x^2+3x^1+5x^0 in file polynomial1.txt\n");
-        fclose(fp);        
-        //press "k" to continue after adding the polynomial
+        fclose(fp);
+        // press "k" to continue after adding the polynomial
         printf("Press k to continue\n");
         char ch;
-        scanf("%c",&ch);
-        scanf("%c",&ch);
-        if(ch=='k'){
-            //read from file polynomial1.txt
+        scanf("%c", &ch);
+        scanf("%c", &ch);
+        if (ch == 'k')
+        {
+            // read from file polynomial1.txt
             fp = fopen("polynomial1.txt", "r");
             char ch;
             int coeff, power;
@@ -344,18 +324,19 @@ struct node *inputfromfile(struct node *start,int n)
             }
             fclose(fp);
         }
-
     }
-    
-    else if(n==2){
+
+    else if (n == 2)
+    {
         fp = fopen("polynomial2.txt", "w");
         printf("Enter the polynomial in the format 4x^3+2x^2+3x^1+5x^0 in file polynomial2.txt\n");
-        fclose(fp);       
+        fclose(fp);
         printf("Press k to continue\n");
         char ch;
-        scanf("%c",&ch);
-        scanf("%c",&ch);
-        if(ch=='k'){
+        scanf("%c", &ch);
+        scanf("%c", &ch);
+        if (ch == 'k')
+        {
             fp = fopen("polynomial2.txt", "r");
             char ch;
             int coeff, power;
@@ -370,24 +351,52 @@ struct node *inputfromfile(struct node *start,int n)
     return start;
 }
 
-//add like terms of the polynomial
+// add like terms of the polynomial
 struct node *addliketerms(struct node *start)
 {
     struct node *p, *q;
+    p = start, q = start->next;
+    if (q == NULL)
+        return start;
+    while (q != NULL)
+    {
+        if (p->power == q->power)
+        {
+            p->coeff = p->coeff + q->coeff;
+            p->next = q->next;
+            free(q);
+            q = p->next;
+        }
+        else
+        {
+            p = q;
+            q = q->next;
+        }
+    }
+    return start;
+}
+
+// sort the polynomial in descending order of power
+struct node *sortll(struct node *start)
+{
+    struct node *p, *q;
+    int temp;
     p = start;
     while (p->next != NULL)
     {
         q = p->next;
         while (q != NULL)
         {
-            if (p->power == q->power)
+            if (p->power < q->power)
             {
-                p->coeff = p->coeff + q->coeff;
-                q = q->next;
-                start = deleteatpos(start, p->power);
+                temp = p->power;
+                p->power = q->power;
+                q->power = temp;
+                temp = p->coeff;
+                p->coeff = q->coeff;
+                q->coeff = temp;
             }
-            else
-                q = q->next;
+            q = q->next;
         }
         p = p->next;
     }
@@ -417,31 +426,31 @@ int main()
             break;
         case 2:
             printf("\nPolynomial 1: ");
-            display(start1);
+            display(addliketerms(sortll(start1)));
             printf("\nPolynomial 2: ");
-            display(start2);
+            display(addliketerms(sortll(start2)));
             break;
         case 3:
             printf("\nAddition Result is: ");
-            display(add(start1, start2));
+            display(addliketerms(sortll(add(start1, start2))));
             break;
         case 4:
             printf("\nMultiplication Result is: ");
-            //add like terms of the polynomial after multiplication
-            display(addliketerms(multiply(start1, start2)));            
+            // add like terms of the polynomial after multiplication
+            display(addliketerms(sortll(multiply(start1, start2))));
             break;
         case 5:
             printf("Enter the polynomial to modify 1 or 2\n");
             int poly;
             scanf("%d", &poly);
             if (poly == 1)
-                modify(start1);
+                start1 = modify(start1);
             else
-                modify(start2);
+                start2 = modify(start2);
             break;
         case 6:
-            start1 = inputfromfile(start1,1);
-            start2 = inputfromfile(start2,2);
+            start1 = inputfromfile(start1, 1);
+            start2 = inputfromfile(start2, 2);
             break;
         case 7:
             exit(0);
@@ -451,4 +460,3 @@ int main()
     }
     return 0;
 }
-

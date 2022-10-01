@@ -183,11 +183,11 @@ int operate(int a, int b, char c)
     switch (c)
     {
     case '+':
-        return a + b;
+        return b + a;
     case '-':
         return b - a;
     case '*':
-        return a * b;
+        return b * a;
     case '/':
         return b/a;
     case '%':

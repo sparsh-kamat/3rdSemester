@@ -11,21 +11,20 @@
 #include <iostream>
 #include <string.h>
 
-
 using namespace std;
 
 class library
 {
-public:
-    int book_record;
     string title;
     string author;
+    int book_record;
     int number_of_copies;
     string subject;
-    void getdata();
-    void display();
-};
 
+    public:
+        void getdata();
+        void display();
+};
 
 void library::getdata()
 {
@@ -42,7 +41,6 @@ void library::getdata()
     cout << "Enter the number of copies of the book: " << endl;
     cin >> number_of_copies;
     fflush(stdin);
-    
 }
 
 void library::display()
@@ -87,7 +85,7 @@ void searchtitle(library l[], int count)
 int main()
 {
     library l[10];
-    int i=0, n, ch;
+    int i = 0, n, ch;
     do
     {
         cout << "Enter your choice: " << endl;

@@ -1,10 +1,3 @@
-// write a program to implement a library management system using array of structures with the following operations and
-// 1 insert book record`````````````````````````
-// 2 & 3 search book record based on title and athor
-// 4 display all the book records
-
-// elements will be title,author, number of copies and  subject linked to the book
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

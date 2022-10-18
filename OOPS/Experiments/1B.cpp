@@ -21,16 +21,18 @@ class library
     int number_of_copies;
     string subject;
 
-    public:
-        void getdata();
-        void display();
+public:
+    void getdata();
+    void display();
+    void searchtitle(library l[], int n);
+    void searchauthor(library l[], int n);
 };
 
 void library::getdata()
 {
     fflush(stdin);
     cout << "\nEnter the title of the book: " << endl;
-    cin >> title;
+    getline(cin, title);
     fflush(stdin);
     cout << "Enter the author of the book: " << endl;
     getline(cin, author);
@@ -51,74 +53,94 @@ void library::display()
     cout << "Subject of the book: " << subject << "\n\n";
 }
 
-void searchauthor(library l[], int count)
+void library::searchtitle(library l[], int n)
 {
-    string author;
-
-    cout << "Enter the author name: " << endl;
+    string t;
+    int flag = 0;
+    cout << "Enter the title of the book you want to search: " << endl;
     fflush(stdin);
-    getline(cin, author);
-    for (int i = 0; i < count; i++)
+    getline(cin, t);
+    for (int i = 0; i < n; i++)
     {
-        if (l[i].author == author)
+        if (l[i].title == t)
         {
             l[i].display();
+            flag = 1;
         }
+    }
+    if (flag == 0)
+    {
+        cout << "Book not found" << endl;
     }
 }
 
-void searchtitle(library l[], int count)
+void library::searchauthor(library l[], int n)
 {
     string a;
-    cout << "Enter the title name: " << endl;
+    int flag = 0;
+    cout << "Enter the author of the book you want to search: " << endl;
     fflush(stdin);
     getline(cin, a);
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < n; i++)
     {
-        if (l[i].title == a)
+        if (l[i].author == a)
         {
             l[i].display();
+            flag = 1;
         }
+    }
+    if (flag == 0)
+    {
+        cout << "Book not found" << endl;
     }
 }
 
 int main()
 {
-    library l[10];
-    int i = 0, n, ch;
+    int n, count = 0;
+    library *b = new library[100];
+    cout << "Enter the number of books you want to enter: " << endl;
+    cin >> n;
+    for (int i = 0; i < n; i++)
+    {
+        count++;
+        b[i].getdata();
+    }
+    int ch;
     do
     {
-        cout << "Enter your choice: " << endl;
-        cout << "1. Enter the book record" << endl;
-        cout << "2. Search the book record based on title" << endl;
-        cout << "3. Search the book record based on author" << endl;
+        cout << "\nEnter your choice: " << endl;
+        cout << "1. Insert book record" << endl;
+        cout << "2. Search book record based on title" << endl;
+        cout << "3. Search book record based on author" << endl;
         cout << "4. Display all the book records" << endl;
         cout << "5. Exit" << endl;
         cin >> ch;
         switch (ch)
         {
         case 1:
-            cout << "Enter the details of book " << i + 1 << endl;
-            l[i].getdata();
-            i++;
+            b[count].getdata();
+            count++;
             break;
         case 2:
-            searchtitle(l, n);
+            b->searchtitle(b, count);
             break;
         case 3:
-            searchauthor(l, n);
+            b->searchauthor(b, count);
             break;
         case 4:
-            for (int j = 0; j < i; j++)
+            for (int i = 0; i < count; i++)
             {
-                l[j].display();
+                b[i].display();
             }
             break;
         case 5:
-            exit(0);
+            break;
         default:
             cout << "Invalid choice" << endl;
         }
     } while (ch != 5);
+    delete[] b;
     return 0;
 }
+

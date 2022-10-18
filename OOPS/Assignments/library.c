@@ -109,7 +109,7 @@ void menu(struct book_record *book,int count)
             searchbooks1(book,count);
             break;
         case 4:
-            for (int i = 0; i < count + 1; i++)
+            for (int i = 0; i < count ; i++)
             {
                 printbooks(&book[i]);
             }

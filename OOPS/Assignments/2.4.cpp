@@ -1,75 +1,52 @@
-/*An election is contested by five candidates . 
-the candidates are numbered 1 to 5 and the voting 
-is done by marking the candidate number on the ballot paper .
-Write a program to read the ballots and count the votes cast for each 
-candidate using an array varible count in case, a numbr i outside range 1 
-the ballot should be considered as a spoilt balot and the program a=should also
-count the number of spoilt ballots. The program should also display the
-result of the election in the form of a table showing the number of votes
-*/
-
-#include <iostream>
-using namespace std;
-
-class candidate
+#include <iostream> 
+using namespace std; 
+class election
 {
-    int num;
-    public:
-    void getdata()
-    {
-        cout << "Enter candidate number: ";
-        cin >> num;
-    }
-    void showdata()
-    {
-        cout << "Candidate number is " << num << endl;
-    }
-    friend void count(candidate & c, int);
+    int *ballots, n, result[6];
+
+public:
+    void input();
+    void count();
+    void display();
 };
-
-void count(candidate c, int count[])
+void election::input()
 {
-    if (c.num == 1)
+    bool auto_ = 0;
+    cout << "Enter the number of ballot papers : ";
+    cin >> n;
+    ballots = new int[n];
+    srand(time(0));
+    for (int count = 0; count < n; count++)
     {
-        count[0]++;
+        cout << "Enter ballot " << count + 1 << " = ";
+        if (auto_ == true)
+        {
+            ballots[count] = rand() % 15 - 5;
+            cout << ballots[count] << endl;
+        }
+        else
+            cin >> ballots[count];
     }
-    else if (c.num == 2)
-    {
-        count[1]++;
-    }
-    else if (c.num == 3)
-    {
-        count[2]++;
-    }
-    else if (c.num == 4)
-    {
-        count[3]++;
-    }
-    else if (c.num == 5)
-    {
-        count[4]++;
-    }
-    else
-    {
-        count[5]++;
-    }
+}
+void election::count()
+{
+    for (int count = 0; count < 6; result[count++] = 0)
+        ;
+    for (int count = 0; count < n; result[ballots[count] > 0 && ballots[count] < 6 ? ballots[count] - 1 : 5]++, count++)
+        ;
+}
+void election::display()
+{
+    cout << "\n\n";
+    for (int count = 0; count < 5; count++)
+        cout << "\tContestant " << count + 1 << " = "<<result[count]<<endl;
+        cout<< "\tSpoilt ballots = " << result[5] << endl;
 }
 
 int main()
 {
-    int count[6] = {0, 0, 0, 0, 0, 0};
-    candidate c;
-    int i;
-    for (i = 0; i < 10; i++)
-    {
-        c.getdata();
-        count(c, count);
-    }
-    cout << "Candidate 1 got " << count[0] << " votes." << endl;
-    cout << "Candidate 2 got " << count[1] << " votes." << endl;
-    cout << "Candidate 3 got " << count[2] << " votes." << endl;
-    cout << "Candidate 4 got " << count[3] << " votes." << endl;
-    cout << "Candidate 5 got " << count[4] << " votes." << endl;
-    cout << "Spoilt ballots are " << count[5] << endl;
-    return 0;
+    election a;
+    a.input();
+    a.count();
+    a.display();
 }

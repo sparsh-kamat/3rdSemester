@@ -30,23 +30,23 @@ struct node *insert(struct node *start, int data)
     }
     return start;
 }
-struct node* insert_at_beg(struct node* start, int data)
+struct node* insert_at_beg(struct node* num, int data)
 {
     struct node* tmp;
     tmp = (struct node*)malloc(sizeof(struct node));
     tmp->info = data;
-    if(start == NULL)
+    if(num == NULL)
         tmp->next = NULL;
     else
     {
-        tmp->next = start;
-        start->prev = tmp;
+        tmp->next = num;
+        num->prev = tmp;
     }
     tmp->prev = NULL;
-    start = tmp;
-    return start;
-}
+    num = tmp;
+    return num;
 
+}
 struct node* sum(struct node* num1, struct node* num2, struct node* num3)
 {
     num3 = NULL;
@@ -70,7 +70,7 @@ struct node* sum(struct node* num1, struct node* num2, struct node* num3)
     }
     return num3;
 }
-void display(struct node *start)
+void display1(struct node *start)
 {
     if (start == NULL)
     {
@@ -86,10 +86,10 @@ void display(struct node *start)
     printf("\n");
 }
 
-struct node *swapadj(struct node *start)
+struct node *adj_swap(struct node *start)
 {
     struct node *p = start;
-    struct node *tmp, *a;
+    struct node *tmp;
     while (p != NULL && p->next != NULL)
     {
         if (p->prev == NULL)
@@ -108,7 +108,7 @@ struct node *swapadj(struct node *start)
     return start;
 }
 
-struct node *create_clist(struct node *last)
+struct node *create_circular(struct node *last)
 {
     int i, n, data;
     printf("Enter the number of nodes: ");
@@ -133,7 +133,7 @@ struct node *create_clist(struct node *last)
     return last;
 }
 
-void display_l(struct node *last)
+void display2(struct node *last)
 {
     struct node *p = last->next;
     while (p != last)
@@ -183,16 +183,16 @@ int main()
     struct node *last = NULL;
     do
     {
-        printf("\nEnter\n1.Swapping of adjacent elements(Doubly Linked Lists):\n");
-        printf("2.Sum of two numbers(Doubly Linked Lists)\n");
-        printf("3: Deletion of alternate nodes (Circular Linked List)\n");
+        printf("\nEnter\n1: Swapping adjacent elements in double linked list\n");
+        printf("2: Sum of two numbers using double linked list\n");
+        printf("3: Delete alternate nodes in circular linked list\n");
         printf("4: Exit\n");
         scanf("%d", &choice);
         switch (choice)
         {
         case 1:
             start = NULL;
-            printf("Enter the number of elements:\n");
+            printf("Enter the number of nodes:\n");
             scanf("%d", &n);
             for (int i = 1; i <= n; i++)
             {
@@ -201,10 +201,10 @@ int main()
                 start = insert(start, data);
             }
             printf("List before swapping: ");
-            display(start);
-            printf("List after swapping: ");
-            start = swapadj(start);
-            display(start);
+            display1(start);
+            printf("List after swapping adjacent elements: ");
+            start = adj_swap(start);
+            display1(start);
             break;
 
         case 2:
@@ -220,7 +220,7 @@ int main()
                 a = a/10;
             }
             printf("Number 1 in reverse order: ");
-            display(num1);
+            display1(num1);
             printf("Enter number 2: ");
             scanf("%d", &n2);
             b = n2;
@@ -231,24 +231,21 @@ int main()
                 b = b/10;
             }
             printf("Number 2 in reverse order: ");
-            display(num2);
+            display1(num2);
             num3 = sum(num1, num2, num3);
-            //display num3 in normal order
             printf("Sum of the numbers: ");
-            display(num3);
+            display1(num3);
             break;
+
         case 3:
-            last = create_clist(last);
+            last = create_circular(last);
             printf("List before deleting: ");
-            display_l(last);
+            display2(last);
             last = delete_alt (last);
-            printf("List after deleting: ");
-            display_l(last);
+            printf("List after deleting alternate nodes: ");
+            display2(last);
             break;
-        case 4:
-            break;
-        default:
-            printf("Invalid choice\n");
+            
         }
     } while (choice != 4);
 }

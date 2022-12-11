@@ -1,5 +1,3 @@
-//show all sorting algorithms
+//show all sorting algorithm
 
-#include<stdio.h>
-
-void bubblesort()
+ 

@@ -35,6 +35,7 @@ struct node* create(int preorder[], int inorder[], int start, int end)
     for (int i = start; i <= end; i++)
     {
         if (inorder[i] == t->data)
+        
         {
             inIndex = i;
             break;

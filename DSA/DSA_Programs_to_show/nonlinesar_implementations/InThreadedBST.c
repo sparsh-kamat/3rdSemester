@@ -1,212 +1,265 @@
-#include <stdio.h>
-#include <stdlib.h>
- 
- //inthreaded binary search tree
-struct node
-{
-    int data;
-    struct node *lchild;
-    struct node *rchild;
+#include<stdio.h>
+#include<stdlib.h>
+typedef enum {false, true} boolean;
 
-    int lthread;
-    int rthread;
+struct node 
+{
+	struct node *left;
+	boolean lthread;
+	int info;
+	boolean rthread;
+	struct node *right;
 };
 
-struct node *root = NULL;
-
-struct node *insert(struct node *root, int data)
+struct node *in_succ(struct node *ptr)
 {
-    struct node *temp,*curr = root,*prev = NULL;
-    temp = (struct node *)malloc(sizeof(struct node));
-    temp->data = data;
-    temp->lchild = NULL;
-    temp->rchild = NULL;
-    temp->lthread = 0;
-    temp->rthread = 0;
-
-    if(root == NULL)
-    {
-        root = temp;
-        root->lchild = root;
-        root->rchild = root;
-        root->lthread = 1;
-        root->rthread = 1;
-        return root;
-    }
-
-    while(curr != NULL)
-    {
-        prev = curr;
-        if(data < curr->data)
-        {
-            if(curr->lthread == 0)
-                curr = curr->lchild;
-            else
-                break;
-        }
-        else
-        {
-            if(curr->rthread == 0)
-                curr = curr->rchild;
-            else
-                break;
-        }
-    }
-
-    if(data < prev->data)
-    {
-        temp->lchild = prev->lchild;
-        temp->rchild = prev;
-        prev->lchild = temp;
-        prev->lthread = 0;
-    }
-    else
-    {
-        temp->rchild = prev->rchild;
-        temp->lchild = prev;
-        prev->rchild = temp;
-        prev->rthread = 0;
-    }
-    return root;
+	if (ptr->rthread==true)
+		return ptr->right;
+	else{
+		ptr=ptr->right;
+		while(ptr->lthread==false)
+			ptr=ptr->left;
+		return ptr;
+	}
 }
 
-//inorder successor
-struct node *inorder_successor(struct node *root, struct node *curr)
+struct node *in_pred(struct node *ptr)
 {
-    struct node *temp;
-    if(curr->rthread == 1)
-        return curr->rchild;
-    else
-    {
-        temp = curr->rchild;
-        while(temp->lthread == 0)
-            temp = temp->lchild;
-        return temp;
-    }
+	if (ptr->lthread==true)
+		return ptr->left;
+	else{
+		ptr=ptr->left;
+		while(ptr->rthread==false)
+			ptr=ptr->right;
+		return ptr;
+	}
 }
 
-//inorder predecessor
-struct node *inorder_predecessor(struct node *root, struct node *curr)
+struct node * insert(struct node *root, int ikey)
 {
-    struct node *temp;
-    if(curr->lthread == 1)
-        return curr->lchild;
-    else
-    {
-        temp = curr->lchild;
-        while(temp->rthread == 0)
-            temp = temp->rchild;
-        return temp; 
-    }
+	struct node *temp, *par=NULL, *ptr=root;
+	int found=0;
+	while (ptr!=NULL){
+		if (ikey==ptr->info){
+			found=1;
+			break;
+		}
+		par=ptr;
+		if (ikey<ptr->info){
+			if (ptr->lthread==false)
+				ptr=ptr->left;
+			else
+				break;
+		}
+		else{
+			if (ptr->rthread==false)
+				ptr=ptr->right;
+			else
+				break;
+		}
+	}
+	if (found)
+		printf("Duplicate key");
+	else{
+		temp=(struct node*)malloc(sizeof(struct node));
+		temp->info=ikey;
+		temp->lthread=true;
+		temp->rthread=true;
+		if (par==NULL){
+			root=temp;
+			temp->left=NULL;
+			temp->right=NULL;
+		}
+		else if (ikey<par->info){
+			temp->left=par->left;
+			temp->right=par;
+			par->lthread=false;
+			par->left=temp;
+		}
+		else{
+			temp->left=par;
+			temp->right=par->right;
+			par->rthread=false;
+			par->right=temp;
+		}
+	}
+	return root;
 }
 
-//deletion of node
-struct node *delete(struct node *root, int data)
+void inorder(struct node *root)
 {
-    struct node *curr = root,*prev = NULL,*temp,*succ,*pred;
-    if(root == NULL)
-    {
-        printf("Tree is empty\n");
-        return root;
-    }
-
-    while(curr != NULL)
-    {
-        if(data == curr->data)
-            break;
-        prev = curr;
-        if(data < curr->data)
-        {
-            if(curr->lthread == 0)
-                curr = curr->lchild;
-            else
-                break;
-        }
-        else
-        {
-            if(curr->rthread == 0)
-                curr = curr->rchild;
-            else
-                break;
-        }
-    }
-
-    if(curr == NULL)
-    {
-        printf("Element not found\n");
-        return root;
-    }
-
-    if(curr->lthread == 0 && curr->rthread == 0)
-    {
-        succ = inorder_successor(root,curr);
-        curr->data = succ->data;
-        prev = curr;
-        curr = succ;
-    }
-
-    if(curr->lthread == 0)
-        temp = curr->lchild;
-    else
-        temp = curr->rchild;
-
-    if(prev == NULL)
-    {
-        root = temp;
-        free(curr);
-        return root;
-    }   
-
-    if(curr == prev->lchild)
-    {
-        prev->lchild = temp;
-        prev->lthread = 1;
-    }
-    else
-    {
-        prev->rchild = temp;
-        prev->rthread = 1;
-    }
-
-    if(curr->lthread == 1 && curr->rthread == 1)
-    {
-        pred = inorder_predecessor(root,curr);
-        succ = inorder_successor(root,curr);
-        pred->rchild = succ;
-        succ->lchild = pred;
-    }
-    free(curr);
-    return root;
+	struct node *ptr;
+	if (root==NULL){
+		printf("Tree is empty");
+		return;
+	}
+	ptr=root;
+	while (ptr->lthread==false)
+		ptr=ptr->left;
+	while (ptr!=NULL){
+		printf("%d ", ptr->info);
+		ptr=in_succ(ptr);
+	}
 }
 
+struct node * case_a(struct node *root, struct node *par, struct node *ptr){
+	if (par==NULL)
+		root=NULL;
+	else if (ptr==par->left){
+		par->lthread=true;
+		par->left=ptr->left;
+	}
+	else{
+		par->rthread=true;
+		par->right=ptr->right;
+	}
+	free(ptr);
+	return root;
+}
 
+struct node * case_b(struct node *root, struct node *par, struct node *ptr){
+	struct node *child, *s, *p;
+	if (ptr->lthread==false)
+		child=ptr->left;
+	else
+		child=ptr->right;
+	if (par==NULL)
+		root=child;
+	else if (ptr==par->left)
+		par->left=child;
+	else
+		par->right=child;
+	s=in_succ(ptr);
+	p=in_pred(ptr);
+	if (ptr->lthread==false)
+		ptr->right=s;
+	else{
+		if (ptr->rthread==false)
+			s->left=p;
+	}
+	free(ptr);
+	return root;
+}
+
+struct node * case_c(struct node *root, struct node *par, struct node *ptr)
+{
+	struct node *succ, *parsucc;
+	parsucc=ptr;
+	succ=ptr->right;
+	while(succ->left!=NULL){
+		parsucc=succ;
+		succ=succ->left;
+	}
+	ptr->info=succ->info;
+	if (succ->lthread==true && succ->rthread==true)
+		root=case_a(root, parsucc, succ);
+	else
+		root=case_b(root, parsucc, succ);
+	return root;
+}
+
+struct node * del(struct node *root, int dkey)
+{
+	struct node *par, *ptr;
+	int found=0;
+	ptr=root; 
+	par=NULL;
+	while (ptr!=NULL){
+		if (dkey==ptr->info){
+			found=1;
+			break;
+		}
+		par=ptr;
+		if (dkey<ptr->info){
+			if (ptr->lthread==false)
+				ptr=ptr->left;
+			else
+				break;
+		}
+		else{
+			if (ptr->rthread==false)
+				ptr=ptr->right;
+			else
+				break;
+		}
+	}
+	if (found==0)
+		printf("dkey not present in tree");
+	else if (ptr->lthread==false && ptr->rthread==false)
+		root=case_c(root, par, ptr);
+	else if (ptr->lthread==false)
+		root=case_b(root, par, ptr);
+	else if (ptr->rthread==false)
+		root=case_b(root, par, ptr);
+	else
+		root=case_a(root, par, ptr);
+	return root;
+}
+
+struct node * search(struct node *ptr, int key)
+{
+	if (ptr==NULL){
+		printf("Element not found");
+		return ptr;
+	} 
+	else if (key<ptr->info)
+		return search(ptr->left, key);
+	else if (key>ptr->info)
+		return search(ptr->right, key);
+	else{
+		printf("Element found");
+		return ptr;
+	}
+}
 
 int main()
 {
-    int choice, data;
-    while(1)
-    {
-        printf("\n1.Insert");
-        printf("\n2.Inorder");
-        printf("\n3.Exit");
-        printf("\nEnter your choice: ");
-        scanf("%d",&choice);
-        switch(choice)
-        {
-            case 1:
-                printf("Enter data: ");
-                scanf("%d",&data);
-                root = insert(root,data);
-                break;
-            case 2:
-                inorder(root);
-                break;
-            case 3:
-                exit(0);
-            default:
-                printf("Invalid choice");
-        }
-    }
-    return 0;
+	int i, choice, num, arr[7]={50, 30, 70, 20, 40, 60, 80};
+	struct node *root=NULL;
+	for (i=0; i<7; i++)
+		root=insert(root, arr[i]);
+	printf("Inorder traversal of given tree: ");
+	inorder(root);
+	
+	while (1){
+		printf("\n1. Insert an element\n");
+		printf("2. Delete an element\n");
+		printf("3. Search for element\n");
+		printf("4. Inorder traversal\n");
+		printf("5. Quit\n");
+		printf("Enter your choice: ");
+		scanf("%d", &choice);
+		
+		switch (choice){
+			case 1:
+				printf("Enter element to be inserted: ");
+				scanf("%d", &num);
+				root=insert(root, num);
+				break;
+				
+			case 2:
+				printf("Enter element to be deleted: ");
+				scanf("%d", &num);
+				root=del(root, num);
+				break;
+				
+			case 3:
+				printf("Enter element to be searched: ");
+				scanf("%d", &num);
+				root=search(root, num);
+				break;
+				
+			case 4:
+				inorder(root);
+				printf("\n");
+				break;
+				
+			case 5:
+				exit(1);
+				
+			default:
+				printf("Wrong choice");
+				
+		}
+	}
 }
-

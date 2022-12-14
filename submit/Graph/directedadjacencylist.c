@@ -1,6 +1,3 @@
-// create, insert and delete a vertex and edge,search,display.
-// adjacency list of directed graph
-
 #include <stdio.h>
 #include <stdlib.h>
 

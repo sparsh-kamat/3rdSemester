@@ -139,7 +139,7 @@ void displayGraph(struct Graph *graph)
     for (v = 0; v < graph->numVertices; v++)
     {
         struct node *temp = graph->adjLists[v];
-        printf("\n Vertex %d\n: ", v);
+        printf("\n Vertex %d: ", v);
         while (temp)
         {
             printf("%d -> ", temp->vertex);
@@ -240,7 +240,7 @@ int main()
             }
             break;
         case 7:
-            display(graph);
+            displayGraph(graph);
             break;
         case 8:
             break;

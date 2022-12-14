@@ -1,9 +1,9 @@
-//palindrome check, parantheses check, conversion given a base all conversions using stack
-//stack using arrays
+// palindrome check, parantheses check, conversion given a base all conversions using stack
+// stack using arrays
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define max 10
 
@@ -47,7 +47,7 @@ char pop(char *stack, int *top)
     return item;
 }
 
-//palindrome check using stack
+// palindrome check using stack
 int palindrome(char *stack, int *top, char *exp)
 {
     int i, flag = 0;
@@ -69,7 +69,7 @@ int palindrome(char *stack, int *top, char *exp)
         return 1;
 }
 
-//parantheses check using stack
+// parantheses check using stack
 int parantheses(char *stack, int *top, char *exp)
 {
     int i, flag = 0;
@@ -98,7 +98,7 @@ int parantheses(char *stack, int *top, char *exp)
         return 1;
 }
 
-//conversion from decimal to binary using stack
+// conversion from decimal to binary using stack
 void decToBin(char *stack, int *top, int num)
 {
     int rem;
@@ -114,7 +114,7 @@ void decToBin(char *stack, int *top, int num)
     }
 }
 
-//conversion from decimal to octal using stack
+// conversion from decimal to octal using stack
 void decToOct(char *stack, int *top, int num)
 {
     int rem;
@@ -130,7 +130,7 @@ void decToOct(char *stack, int *top, int num)
     }
 }
 
-//conversion from decimal to hexadecimal using stack
+// conversion from decimal to hexadecimal using stack
 void decToHex(char *stack, int *top, int num)
 {
     int rem;
@@ -202,3 +202,5 @@ int main()
             printf("\nInvalid Choice");
         }
     }
+    return 0;
+}

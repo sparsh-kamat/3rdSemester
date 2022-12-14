@@ -1,6 +1,3 @@
-//cicular queue insert delete peek display
-
-//circular queue using array
 #include<stdio.h>
 #include<stdlib.h>
 #define max 5

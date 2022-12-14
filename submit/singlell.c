@@ -21,7 +21,6 @@ struct node *create_linked_list(struct node *start)
     for (int i = 0; i < n; i++)
     {
         temp = (struct node *)malloc(sizeof(struct node));
-        printf("\nEnter the data for node %d: ", i + 1);
         scanf("%d", &temp->data);
         temp->link = NULL;
         if (start == NULL)
@@ -36,7 +35,6 @@ struct node *create_linked_list(struct node *start)
     }
     return start;
 };
-
 
 // display the linked list
 void display_linked_list(struct node *start)
@@ -72,17 +70,19 @@ int count_nodes(struct node *start)
 };
 
 // search an element in the linked list
-struct node *search(struct node *start, int item)
+int search(struct node *start, int item)
 {
     struct node *p;
+    int pos = 1;
     p = start;
     while (p != NULL)
     {
         if (p->data == item)
-            return p;
+            return pos;
         p = p->link;
+        pos++;
     }
-    return NULL;
+    return -1;
 };
 
 // insert a node at the beginning of the linked list
@@ -214,7 +214,7 @@ struct node *reverse(struct node *start)
     return start;
 };
 
-//insert or delete at a given position
+// insert or delete at a given position
 struct node *insert_at_pos(struct node *start, int data, int pos)
 {
     struct node *temp, *p;
@@ -270,8 +270,9 @@ struct node *delete_at_pos(struct node *start, int pos)
     return start;
 };
 
-//main
-int main(){
+// main
+int main()
+{
     struct node *start = NULL;
     int choice, data, item, pos;
     while (1)
@@ -294,72 +295,77 @@ int main(){
         switch (choice)
         {
         case 1:
-            start = create_list(start);
+            start = create_linked_list(start);
             break;
         case 2:
-            display(start);
+            display_linked_list(start);
             break;
         case 3:
-            printf("\nNumber of elements are %d\n", count_nodes(start));
+            printf("Number of elements are %d\n", count_nodes(start));
             break;
         case 4:
-            printf("\nEnter the element to be searched : ");
+            printf("Enter the element to be searched : ");
             scanf("%d", &data);
-            p = search(start, data);
-            if (p == NULL)
-                printf("\nElement %d not found in the list\n", data);
+            int ss = search(start, data);
+            if (ss == -1)
+                printf("Element %d is not present in the list\n", data);
             else
-                printf("\nElement %d found in the list\n", data);
-            break;
+                printf("Element %d is present at position %d\n", data, ss);
         case 5:
-            printf("\nEnter the element to be inserted : ");
+            printf("Enter the element to be inserted : ");
             scanf("%d", &data);
             start = insert_at_beg(start, data);
             break;
         case 6:
-            printf("\nEnter the element to be inserted : ");
+            printf("Enter the element to be inserted : ");
             scanf("%d", &data);
             start = insert_at_end(start, data);
             break;
         case 7:
-            printf("\nEnter the element to be inserted : ");
+            printf("Enter the element to be inserted : ");
             scanf("%d", &data);
-            printf("\nEnter the element after which to insert : ");
+            printf("Enter the element after which to insert : ");
             scanf("%d", &item);
             start = insert_after(start, data, item);
             break;
+
         case 8:
-            printf("\nEnter the element to be inserted : ");
+            printf("Enter the element to be inserted : ");
             scanf("%d", &data);
-            printf("\nEnter the element before which to insert : ");
+            printf("Enter the element before which to insert : ");
             scanf("%d", &item);
             start = insert_before(start, data, item);
             break;
+
         case 9:
             printf("Enter the element to be inserted : ");
             scanf("%d", &data);
-            printf("\nEnter the position at which to insert : ");
+            printf("Enter the position at which to insert : ");
             scanf("%d", &pos);
             start = insert_at_pos(start, data, pos);
             break;
+
         case 10:
-            printf("\nEnter the element to be deleted : ");
+            printf("Enter the element to be deleted : ");
             scanf("%d", &data);
             start = delete_node(start, data);
             break;
+
         case 11:
-            printf("\nEnter the position of the element to be deleted : ");
+            printf("Enter the position of the element to be deleted : ");
             scanf("%d", &pos);
             start = delete_at_pos(start, pos);
             break;
+
         case 12:
             start = reverse(start);
             break;
+
         case 13:
             exit(1);
         default:
             printf("Wrong choice\n");
-        } /*End of switch */
-    }     /*End of while */
+        }
+    }
     return 0;
 }

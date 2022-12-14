@@ -1,6 +1,3 @@
-// create, insert and delete a vertex and edge,search,display.
-// adjacency matrix of undirected graph
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -20,7 +17,7 @@ struct Graph *insertVertex(struct Graph *graph, int vertex)
         printf("Graph is full");
         return graph;
     }
-    graph->visited[vertex] = 0;
+    graph->visited[vertex] = 1;
     graph->numVertices++;
     return graph;
 };
@@ -76,6 +73,26 @@ void display(struct Graph *graph)
         printf(" | ");
     }
     printf("\n");
+};
+
+struct Graph *createGraph()
+{
+    struct Graph *graph = (struct Graph *)malloc(sizeof(struct Graph));
+    graph->numVertices = 0;
+    int i, j;
+    for (i = 0; i < N; i++)
+    {
+        for (j = 0; j < N; j++)
+        {
+            graph->adjMatrix[i][j] = 0;
+        }
+    }
+    graph->visited = (int *)malloc(N * sizeof(int));
+    for (i = 0; i < N; i++)
+    {
+        graph->visited[i] = 0;
+    }
+    return graph;
 };
 
 int main()

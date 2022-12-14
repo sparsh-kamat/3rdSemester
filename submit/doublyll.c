@@ -1,17 +1,14 @@
-// doubly linked lists
-    // create,search,count,delete,display,add at beg,empty,end,before,after,rev,position
-
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node
+struct node    
 {
     int data;
     struct node *prev;
     struct node *next;
 };
 
-//add to empty
+// add to empty
 struct node *add_to_empty(struct node *start, int data)
 {
     struct node *temp;
@@ -23,7 +20,7 @@ struct node *add_to_empty(struct node *start, int data)
     return start;
 };
 
-//add at beg
+// add at beg
 struct node *add_at_beg(struct node *start, int data)
 {
     struct node *temp;
@@ -36,7 +33,7 @@ struct node *add_at_beg(struct node *start, int data)
     return start;
 };
 
-//add at end
+// add at end
 struct node *add_at_end(struct node *start, int data)
 {
     struct node *temp, *p;
@@ -51,7 +48,7 @@ struct node *add_at_end(struct node *start, int data)
     return start;
 };
 
-//add before
+// add before
 struct node *add_before(struct node *start, int data, int item)
 {
     struct node *temp, *p;
@@ -75,7 +72,7 @@ struct node *add_before(struct node *start, int data, int item)
     return start;
 };
 
-//add after
+// add after
 struct node *add_after(struct node *start, int data, int item)
 {
     struct node *temp, *p;
@@ -99,7 +96,7 @@ struct node *add_after(struct node *start, int data, int item)
     return start;
 };
 
-//delete
+// delete
 struct node *del(struct node *start, int data)
 {
     struct node *temp;
@@ -153,8 +150,7 @@ struct node *del(struct node *start, int data)
     return start;
 };
 
-
-//display
+// display
 void display(struct node *start)
 {
     struct node *p;
@@ -173,7 +169,7 @@ void display(struct node *start)
     printf(" ");
 };
 
-//count
+// count
 void count(struct node *start)
 {
     struct node *p;
@@ -187,7 +183,7 @@ void count(struct node *start)
     printf("Number of elements are %d", cnt);
 };
 
-//search
+// search
 struct node *search(struct node *start, int data)
 {
     struct node *p;
@@ -207,7 +203,7 @@ struct node *search(struct node *start, int data)
     return start;
 };
 
-//create
+// create
 struct node *create_list(struct node *start)
 {
     int i, n, data;
@@ -228,7 +224,7 @@ struct node *create_list(struct node *start)
     return start;
 };
 
-//reverse
+// reverse
 struct node *reverse(struct node *start)
 {
     struct node *p1, *p2;
@@ -248,18 +244,18 @@ struct node *reverse(struct node *start)
     return start;
 };
 
-//main
+// main
 int main()
 {
     struct node *start = NULL;
     int choice, data, item;
     while (1)
     {
-        printf("1.Create List\n");
+        printf("\n1.Create List\n");
         printf("2.Display\n");
         printf("3.Count\n");
         printf("4.Search\n");
-        printf("5.Add to empty list / Add at beginning\n");
+        printf("5.Add at beginning\n");
         printf("6.Add at end\n");
         printf("7.Add before node\n");
         printf("8.Add after node\n");
@@ -268,6 +264,7 @@ int main()
         printf("11.Quit\n");
         printf("Enter your choice : ");
         scanf("%d", &choice);
+        printf("\n");
         switch (choice)
         {
         case 1:
@@ -287,7 +284,7 @@ int main()
         case 5:
             printf("Enter the element to be inserted : ");
             scanf("%d", &data);
-            start = add_to_empty(start, data);
+            start = add_at_beg(start, data);
             break;
         case 6:
             printf("Enter the element to be inserted : ");
@@ -324,5 +321,3 @@ int main()
     }
     return 0;
 };
-
-

@@ -64,7 +64,6 @@ int count_nodes(struct node *start)
         p = p->next;
     }
     return count;
-
 };
 
 struct node *add_at_beginning(struct node *start)
@@ -92,7 +91,54 @@ struct node *add_at_end(struct node *start)
     return start;
 };
 
+// Split the linked list into two linked lists, one containing elements at even positions and other containing elements at odd positions
 struct node *split_even_odd(struct node *start)
+{
+    struct node *p, *q, *start1, *start2;
+    int pos = 0;
+    p = start;
+    start1 = NULL;
+    start2 = NULL;
+    while (p != NULL)
+    {
+        q = (struct node *)malloc(sizeof(struct node));
+        q->data = p->data;
+        q->next = NULL;
+        if (pos % 2 == 0)
+        {
+            if (start1 == NULL)
+                start1 = q;
+            else
+            {
+                struct node *r = start1;
+                while (r->next != NULL)
+                    r = r->next;
+                r->next = q;
+            }
+        }
+        else
+        {
+            if (start2 == NULL)
+                start2 = q;
+            else
+            {
+                struct node *r = start2;
+                while (r->next != NULL)
+                    r = r->next;
+                r->next = q;
+            }
+        }
+        p = p->next;
+        pos++;
+    }
+    printf("\nEven linked list is: ");
+    display_linked_list(start1);
+    printf("\nOdd linked list is: ");
+    display_linked_list(start2);
+    return start;
+};
+
+void split_even_odd_2(struct node *start)
 {
     struct node *p, *q, *start1, *start2;
     p = start;
@@ -100,88 +146,39 @@ struct node *split_even_odd(struct node *start)
     start2 = NULL;
     while (p != NULL)
     {
+        q = (struct node *)malloc(sizeof(struct node));
+        q->data = p->data;
+        q->next = NULL;
         if (p->data % 2 == 0)
         {
             if (start1 == NULL)
-            {
-                start1 = p;
-                q = start1;
-            }
+                start1 = q;
             else
             {
-                q->next = p;
-                q = q->next;
+                struct node *r = start1;
+                while (r->next != NULL)
+                    r = r->next;
+                r->next = q;
             }
         }
         else
         {
             if (start2 == NULL)
-            {
-                start2 = p;
-                q = start2;
-            }
+                start2 = q;
             else
             {
-                q->next = p;
-                q = q->next;
+                struct node *r = start2;
+                while (r->next != NULL)
+                    r = r->next;
+                r->next = q;
             }
         }
         p = p->next;
     }
-    q->next = NULL;
-    printf("Even list is: ");
+    printf("Even linked list is: ");
     display_linked_list(start1);
-    printf("Odd list is: ");
+    printf("Odd linked list is: ");
     display_linked_list(start2);
-    return start;
-};
-
-//split even odd without creating new lists
-struct node *split_even_odd_2(struct node *start)
-{
-    struct node *p, *q, *odd;
-    p = start;
-    odd = NULL;
-
-    while (p != NULL)
-    {
-        if (p->data % 2 == 0)
-        {
-            if (start == p)
-            {
-                start = p->next;
-                p->next = NULL;
-                q = p;
-                p = start;
-            }
-            else
-            {
-                q->next = p->next;
-                p->next = NULL;
-                p = q->next;
-            }
-        }
-        else
-        {
-            if (odd == NULL)
-            {
-                odd = p;
-                q = odd;
-            }
-            else
-            {
-                q->next = p;
-                q = q->next;
-            }
-            p = p->next;
-        }
-    }
-    q->next = NULL;
-    printf("Even list is: ");
-    display_linked_list(start);
-    printf("Odd list is: ");
-    display_linked_list(odd);
-    return start;
 };
 
 int main()
@@ -221,7 +218,7 @@ int main()
             start = split_even_odd(start);
             break;
         case 7:
-            start = split_even_odd_2(start);
+            split_even_odd_2(start);
             break;
         case 8:
             exit(0);

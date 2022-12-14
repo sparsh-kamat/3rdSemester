@@ -1,6 +1,3 @@
-// create, insert and delete a vertex and edge,search,display.
-// adjacency matrix of directed graph
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -20,7 +17,7 @@ struct Graph *insertVertex(struct Graph *graph, int vertex)
         printf("Graph is full");
         return graph;
     }
-    graph->visited[vertex] = 0;
+    graph->visited[vertex] = 1;
     graph->numVertices++;
     return graph;
 };

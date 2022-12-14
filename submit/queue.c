@@ -1,10 +1,7 @@
-// queue
-//     insert,delete,peek,display
+#include <stdio.h>
+#include <stdlib.h>
 
-#include<stdio.h>
-#include<stdlib.h>
-
-#define max 10
+#define max 5
 
 int isFull(int top)
 {
@@ -93,7 +90,7 @@ int main()
             insert(queue, &front, &rear, item);
             break;
         case 2:
-            item = delete(queue, &front, &rear);
+            item = delete (queue, &front, &rear);
             if (item == -1)
                 printf("\nQueue is empty");
             else

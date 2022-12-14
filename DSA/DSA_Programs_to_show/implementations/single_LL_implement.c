@@ -1,4 +1,4 @@
-oiouytr#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 // defining the structure of the node

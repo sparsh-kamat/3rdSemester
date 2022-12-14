@@ -1,5 +1,3 @@
-// binary search tree
-// search, delete, inorder, preorder, postorder, height of tree ,minimum and maximum key
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -137,60 +135,6 @@ struct node *delete(struct node *ptr, int key)
     return ptr;
 }
 
-int max(struct node *ptr)
-{
-    if (ptr == NULL)
-    {
-        return -1;
-    }
-    else if (ptr->rchild == NULL)
-    {
-        return ptr->data;
-    }
-    else
-    {
-        return max(ptr->rchild);
-    }
-}
-
-int min(struct node *ptr)
-{
-    if (ptr == NULL)
-    {
-        return -1;
-    }
-    else if (ptr->lchild == NULL)
-    {
-        return ptr->data;
-    }
-    else
-    {
-        return min(ptr->lchild);
-    }
-}
-
-int height(struct node *ptr)
-{
-    int lheight, rheight;
-    if (ptr == NULL)
-    {
-        return 0;
-    }
-    else
-    {
-        lheight = height(ptr->lchild);
-        rheight = height(ptr->rchild);
-        if (lheight > rheight)
-        {
-            return lheight + 1;
-        }
-        else
-        {
-            return rheight + 1;
-        }
-    }
-}
-
 int main()
 {
     int choice, value;
@@ -203,8 +147,7 @@ int main()
         printf("\n4.Inorder");
         printf("\n5.Preorder");
         printf("\n6.Postorder");
-        printf("\n7.Maximum");
-        printf("\n8.Minimum");
+        printf("\n7.Exit");
         printf("\nEnter your choice:");
         scanf("%d", &choice);
         switch (choice)
@@ -243,14 +186,7 @@ int main()
             postorder(root);
             break;
         case 7:
-            printf("\nMaximum key: %d", max(root));
-            break;
-        case 8:
-            printf("\nMinimum key: %d", min(root));
-            break;
-        case 9:
-            printf("\nHeight of tree: %d", height(root));
-            break;
+            exit(0);
         default:
             printf("\nInvalid choice");
         }

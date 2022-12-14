@@ -1,5 +1,5 @@
-//create, insert and delete a vertex and edge,search,display.
-//adjacency list of directed graph
+// create, insert and delete a vertex and edge,search,display.
+// adjacency list of directed graph
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,7 +22,7 @@ struct Graph
     int *visited;
 };
 
-//insert a vertex
+// insert a vertex
 struct Graph *insertVertex(struct Graph *graph, int vertex)
 {
     if (graph->numVertices == N)
@@ -36,7 +36,7 @@ struct Graph *insertVertex(struct Graph *graph, int vertex)
     return graph;
 };
 
-//insert an edge
+// insert an edge
 struct Graph *insertEdge(struct Graph *graph, int src, int dest)
 {
     // Add edge from src to dest
@@ -47,7 +47,7 @@ struct Graph *insertEdge(struct Graph *graph, int src, int dest)
     return graph;
 };
 
-//delete a vertex
+// delete a vertex
 struct Graph *deleteVertex(struct Graph *graph, int vertex)
 {
     struct node *temp = graph->adjLists[vertex];
@@ -62,7 +62,7 @@ struct Graph *deleteVertex(struct Graph *graph, int vertex)
     return graph;
 };
 
-//delete an edge
+// delete an edge
 struct Graph *deleteEdge(struct Graph *graph, int src, int dest)
 {
     struct node *temp = graph->adjLists[src];
@@ -88,7 +88,7 @@ struct Graph *deleteEdge(struct Graph *graph, int src, int dest)
     return graph;
 };
 
-//search a vertex
+// search a vertex
 int searchVertex(struct Graph *graph, int vertex)
 {
     if (graph->adjLists[vertex] == NULL)
@@ -101,7 +101,7 @@ int searchVertex(struct Graph *graph, int vertex)
     }
 };
 
-//search an edge
+// search an edge
 int searchEdge(struct Graph *graph, int src, int dest)
 {
     struct node *temp = graph->adjLists[src];
@@ -116,7 +116,7 @@ int searchEdge(struct Graph *graph, int src, int dest)
     return 0;
 };
 
-//display the graph
+// display the graph
 void display(struct Graph *graph)
 {
     int v;
@@ -133,7 +133,7 @@ void display(struct Graph *graph)
     }
 };
 
-//create a graph
+// create a graph
 struct Graph *createGraph()
 {
     struct Graph *graph = malloc(sizeof(struct Graph));
@@ -146,7 +146,7 @@ struct Graph *createGraph()
 int main()
 {
     struct Graph *graph = createGraph();
-    int i, j, k, l,m , n,o;
+    int i, j, k, l, m, n, o;
     printf("Enter the number of vertices: ");
     scanf("%d", &i);
     for (j = 0; j < i; j++)
@@ -163,7 +163,7 @@ int main()
         scanf("%d %d", &n, &o);
         graph = insertEdge(graph, n, o);
     }
-    //menu
+    // menu
     int choice;
     do
     {
@@ -224,7 +224,7 @@ int main()
             {
                 printf("Edge not found\n");
             }
-            break;  
+            break;
         case 7:
             display(graph);
             break;
@@ -236,4 +236,3 @@ int main()
     } while (choice != 8);
     return 0;
 }
-

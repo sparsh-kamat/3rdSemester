@@ -96,11 +96,11 @@ struct node *delete(struct node *ptr, int key)
     }
     if (key < ptr->data)
     {
-        ptr->lchild = delete(ptr->lchild, key);
+        ptr->lchild = delete (ptr->lchild, key);
     }
     else if (key > ptr->data)
     {
-        ptr->rchild = delete(ptr->rchild, key);
+        ptr->rchild = delete (ptr->rchild, key);
     }
     else
     {
@@ -129,7 +129,7 @@ struct node *delete(struct node *ptr, int key)
                 temp = temp->lchild;
             }
             ptr->data = temp->data;
-            ptr->rchild = delete(ptr->rchild, temp->data);
+            ptr->rchild = delete (ptr->rchild, temp->data);
         }
     }
     return ptr;
@@ -193,4 +193,3 @@ int main()
     }
     return 0;
 }
-

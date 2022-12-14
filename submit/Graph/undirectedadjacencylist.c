@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #define N 100
- 
+
 struct node
 {
     int vertex;
@@ -36,7 +36,7 @@ struct Graph *insertEdge(struct Graph *graph, int src, int dest)
     newNode->vertex = dest;
     newNode->next = graph->adjLists[src];
     graph->adjLists[src] = newNode;
- 
+
     // Add edge from dest to src
     newNode = malloc(sizeof(struct node));
     newNode->vertex = src;
@@ -45,7 +45,7 @@ struct Graph *insertEdge(struct Graph *graph, int src, int dest)
     return graph;
 };
 
-//delete a vertex
+// delete a vertex
 struct Graph *deleteVertex(struct Graph *graph, int vertex)
 {
     struct node *temp = graph->adjLists[vertex];
@@ -161,7 +161,7 @@ struct Graph *createGraph()
 int main()
 {
     struct Graph *graph = createGraph();
-    int i, j, k, l,m , n,o;
+    int i, j, k, l, m, n, o;
     printf("Enter the number of vertices: ");
     scanf("%d", &i);
     for (j = 0; j < i; j++)
@@ -250,4 +250,3 @@ int main()
     } while (choice != 8);
     return 0;
 }
-

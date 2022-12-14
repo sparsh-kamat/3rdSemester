@@ -1,5 +1,5 @@
 // create, insert and delete a vertex and edge,search,display.
-// adjacency matrix of directed graph
+// adjacency matrix of undirected graph
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,6 +28,7 @@ struct Graph *insertVertex(struct Graph *graph, int vertex)
 struct Graph *insertEdge(struct Graph *graph, int src, int dest)
 {
     graph->adjMatrix[src][dest] = 1;
+    graph->adjMatrix[dest][src] = 1;
     return graph;
 };
 
@@ -41,6 +42,7 @@ struct Graph *deleteVertex(struct Graph *graph, int vertex)
 struct Graph *deleteEdge(struct Graph *graph, int src, int dest)
 {
     graph->adjMatrix[src][dest] = 0;
+    graph->adjMatrix[dest][src] = 0;
     return graph;
 };
 
@@ -65,31 +67,15 @@ void display(struct Graph *graph)
     int i, j;
     for (i = 0; i < graph->numVertices; i++)
     {
-        printf("%d: ", i);
+        printf(" %d: ", i);
         for (j = 0; j < graph->numVertices; j++)
         {
             if (graph->adjMatrix[i][j] == 1)
-                printf("%d ", j);
+                printf(" %d", j);
         }
         printf(" | ");
     }
     printf("\n");
-};
-
-struct Graph *createGraph()
-{
-    struct Graph *graph = malloc(sizeof(struct Graph));
-    graph->numVertices = 0;
-    graph->visited = malloc(N * sizeof(int));
-    int i, j;
-    for (i = 0; i < N; i++)
-    {
-        for (j = 0; j < N; j++)
-        {
-            graph->adjMatrix[i][j] = 0;
-        }
-    }
-    return graph;
 };
 
 int main()
@@ -160,7 +146,6 @@ int main()
             {
                 printf("Vertex not found\n");
             }
-
             break;
         case 6:
             printf("Enter the source and destination: ");
